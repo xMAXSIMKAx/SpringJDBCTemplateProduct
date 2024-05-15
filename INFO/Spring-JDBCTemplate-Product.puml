@@ -1,0 +1,150 @@
+@startuml
+class org.example.app.view.ProductDeleteView {
++ String getData()
++ void getOutput(String)
+}
+
+class org.example.app.view.ProductReadView {
++ void getOutput(String)
+}
+
+class org.example.app.repository.impl.ProductRepository {
+~ JdbcTemplate jdbcTemplate
++ boolean create(Product)
++ Optional<List<Product>> fetchAll()
++ Optional<Product> fetchById(Long)
++ boolean update(Product)
++ boolean delete(Product)
+}
+
+
+interface org.example.app.repository.AppRepository {
+~ boolean create(T)
+~ Optional<List<T>> fetchAll()
+~ Optional<T> fetchById(Long)
+~ boolean update(T)
+~ boolean delete(T)
+}
+
+class org.example.app.App {
++ {static} void main(String[])
+}
+
+class org.example.app.utils.AppStarter {
++ {static} void startApp()
+}
+
+class org.example.app.utils.IdValidator {
+- {static} String ID_RGX
++ {static} boolean isIdValid(String)
+}
+
+
+class org.example.app.view.AppView {
+~ Scanner scanner
++ String getOption()
+- void showMenu()
++ void getOutput(String)
+}
+
+
+class org.example.app.utils.Constants {
++ {static} String PRICE_ERR_MSG
++ {static} String ID_ERR_MSG
++ {static} String DATA_ABSENT_MSG
++ {static} String DATA_INSERT_MSG
++ {static} String DATA_UPDATE_MSG
++ {static} String DATA_DELETE_MSG
++ {static} String APP_CLOSE_MSG
++ {static} String INPUT_REQ_MSG
++ {static} String INCORRECT_VALUE_MSG
++ {static} String SMTH_WRONG_MSG
+}
+
+class org.example.app.service.ProductService {
+~ Product product
+~ ProductRepository repository
+~ Map<String,String> errors
++ String create(Product)
++ String getAll()
++ String getById(String)
++ String update(Product)
++ String delete(String)
+- void validateData(Product)
+- void validateId(String)
+}
+
+
+class org.example.app.entity.Product {
+- Long id
+- String name
+- int quota
+- long price
++ boolean equals(Object)
++ int hashCode()
++ Long getId()
++ void setId(Long)
++ String getName()
++ void setName(String)
++ int getQuota()
++ void setQuota(int)
++ long getPrice()
++ void setPrice(long)
++ String toString()
+}
+
+
+class org.example.app.view.ProductReadByIdView {
++ String getData()
++ void getOutput(String)
+}
+
+class org.example.app.exceptions.ProductDataException {
+~ Map<String,String> errors
++ String getErrors(Map<String,String>)
+}
+
+
+class org.example.app.view.ProductCreateView {
++ String[] getData()
++ void getOutput(String)
+}
+
+class org.example.app.entity.ProductMapper {
++ Product mapRow(ResultSet,int)
+}
+
+class org.example.app.conf.AppConfig {
+~ Environment environment
+~ DataSource dataSource()
+}
+
+
+class org.example.app.view.ProductUpdateView {
++ Map<String,String> getData()
++ void getOutput(String)
+}
+
+class org.example.app.controller.ProductController {
+~ AppView menuView
+~ ProductCreateView createView
+~ ProductReadView readView
+~ ProductReadByIdView readByIdView
+~ ProductUpdateView updateView
+~ ProductDeleteView deleteView
+~ ProductService service
++ void getOption()
++ void create()
++ void getAll()
++ void getById()
++ void update()
++ void delete()
+}
+
+
+
+
+org.example.app.repository.AppRepository <|.. org.example.app.repository.impl.ProductRepository
+org.example.app.exceptions.RuntimeException <|-- org.example.app.exceptions.ProductDataException
+org.springframework.jdbc.core.RowMapper <|.. org.example.app.entity.ProductMapper
+@enduml
